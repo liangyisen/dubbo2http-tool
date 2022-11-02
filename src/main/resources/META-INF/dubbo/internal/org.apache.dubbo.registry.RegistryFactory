@@ -1,0 +1,3 @@
+#green=GreenRegistryFactory
+#blue=BlueRegistryFactory
+baseZookeeper=com.yisen.framework.rpc.registry.BaseZookeeperRegistryFactory
