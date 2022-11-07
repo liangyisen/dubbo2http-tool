@@ -1,7 +1,7 @@
 package com.yisen.framework.rpc.registry.blue;
 
-import com.alibaba.dubbo.common.Constants;
 import org.apache.dubbo.common.URL;
+import org.apache.dubbo.common.constants.CommonConstants;
 import org.apache.dubbo.registry.NotifyListener;
 import org.apache.dubbo.registry.zookeeper.ZookeeperRegistry;
 import org.apache.dubbo.remoting.zookeeper.ZookeeperTransporter;
@@ -16,9 +16,9 @@ public class BlueRegistry extends ZookeeperRegistry {
     }
 
     private URL addGroup(URL url) {
-        String side = url.getParameter(Constants.SIDE_KEY);
-        if (Constants.PROVIDER_SIDE.equals(side) || Constants.CONSUMER_SIDE.equals(side)) {
-            url = url.addParameter(Constants.GROUP_KEY, "blue");
+        String side = url.getParameter(CommonConstants.SIDE_KEY);
+        if (CommonConstants.PROVIDER_SIDE.equals(side) || CommonConstants.CONSUMER_SIDE.equals(side)) {
+            url = url.addParameter(CommonConstants.GROUP_KEY, "blue");
         }
         return url;
     }

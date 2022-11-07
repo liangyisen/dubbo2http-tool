@@ -1,7 +1,7 @@
 package com.yisen.framework.rpc.registry.green;
 
-import com.alibaba.dubbo.common.Constants;
 import org.apache.dubbo.common.URL;
+import org.apache.dubbo.common.constants.CommonConstants;
 import org.apache.dubbo.common.utils.StringUtils;
 import org.apache.dubbo.registry.NotifyListener;
 import org.apache.dubbo.registry.zookeeper.ZookeeperRegistry;
@@ -18,9 +18,9 @@ public class GreenRegistry extends ZookeeperRegistry {
     private URL addGroup(URL url) {
         if (StringUtils.isNotEmpty(url.getServiceInterface())
                 && !url.getServiceInterface().equalsIgnoreCase("org.apache.dubbo.monitor.MonitorService")) {
-            String side = url.getParameter(Constants.SIDE_KEY);
-            if (Constants.PROVIDER_SIDE.equals(side) || Constants.CONSUMER_SIDE.equals(side)) {
-                url = url.addParameter(Constants.GROUP_KEY, "green");
+            String side = url.getParameter(CommonConstants.SIDE_KEY);
+            if (CommonConstants.PROVIDER_SIDE.equals(side) || CommonConstants.CONSUMER_SIDE.equals(side)) {
+                url = url.addParameter(CommonConstants.GROUP_KEY, "green");
             }
         }
         return url;

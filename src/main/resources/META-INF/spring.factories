@@ -1,3 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.yisen.framework.rpc.conf.DubboApplicationAutoConfiguration
-
+com.yisen.framework.rpc.conf.DubboApplicationAutoConfiguration,\
+com.yisen.framework.rpc.listener.ServiceRunSuccessListener
