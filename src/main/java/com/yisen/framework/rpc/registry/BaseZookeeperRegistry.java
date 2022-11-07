@@ -12,9 +12,9 @@ import org.apache.dubbo.registry.NotifyListener;
 import org.apache.dubbo.registry.Registry;
 import org.apache.dubbo.rpc.cluster.Constants;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static org.apache.dubbo.rpc.Constants.STUB_KEY;
 
@@ -22,10 +22,10 @@ import static org.apache.dubbo.rpc.Constants.STUB_KEY;
 public class BaseZookeeperRegistry implements Registry {
 
     private static final Logger logger = LoggerFactory.getLogger(BaseZookeeperRegistry.class);
-    private static final Map<String, ReferenceConfig> localCallerReferMap = new HashMap<>();
+    private static final Map<String, ReferenceConfig> localCallerReferMap = new ConcurrentHashMap<>();
 
-    public static Map<String, Class> PROVIDER_MAP = new HashMap<>();
-    public static Map<String, Class> CONSUMER_MAP = new HashMap<>();
+    public static Map<String, Class> PROVIDER_MAP = new ConcurrentHashMap<>();
+    public static Map<String, Class> CONSUMER_MAP = new ConcurrentHashMap<>();
     private String protocol;
     private String zkAddr;
     private Registry originRegistry;
@@ -57,22 +57,28 @@ public class BaseZookeeperRegistry implements Registry {
         }
         originRegistry.register(url);
         String className = url.getPath();
-        if (className.startsWith("com.alibaba"))
+        if (className.startsWith("com.alibaba") || className.startsWith("org.apache.dubbo")) {
             return;
-        String protocal = url.getProtocol();
+        }
+        String protocol = url.getProtocol();
         try {
-            if (protocal.equals(CommonConstants.CONSUMER)) {
+            if (protocol.equals(CommonConstants.CONSUMER)) {
                 CONSUMER_MAP.put(className, Class.forName(className));
             } else if (CommonConstants.PROVIDER_SIDE.equals(side)) {
                 PROVIDER_MAP.put(className, Class.forName(className));
                 String localCallerName = getCreateLocalCallerName(className);
 
                 if (localCallerReferMap.get(localCallerName) == null && Boolean.parseBoolean(System.getProperty("export_restful"))) {
+                    //ApplicationConfig配置
                     ApplicationConfig application = new ApplicationConfig();
-                    application.setName(localCallerName);
+                    application.setName(url.getParameter(CommonConstants.APPLICATION_KEY, localCallerName));
+
+                    //RegistryConfig配置
                     RegistryConfig registry = new RegistryConfig();
                     registry.setAddress(this.protocol + "://" + this.zkAddr);
                     registry.setProtocol(this.protocol);
+
+                    //消费者ReferenceConfig
                     ReferenceConfig reference = new ReferenceConfig();
                     reference.setApplication(application);
                     reference.setRetries(url.getParameter(Constants.RETRIES_KEY, 0));
@@ -82,7 +88,7 @@ public class BaseZookeeperRegistry implements Registry {
                     reference.setStub(Boolean.valueOf(url.getParameter(STUB_KEY, "false")));
                     reference.setRegistry(registry);
                     reference.setInterface(className);
-                    reference.setUrl("dubbo://" + url.getAddress());
+                    reference.setUrl("dubbo://" + url.getAddress() + "?" + CommonConstants.VERSION_KEY + "=" + url.getParameter(CommonConstants.VERSION_KEY));
 
                     localCallerReferMap.put(localCallerName, reference);
                 }

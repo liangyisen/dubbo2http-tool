@@ -3,16 +3,16 @@ package com.yisen.framework.rpc.controller.model;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @SuppressWarnings("rawtypes")
 public class LocalProvider {
     public static final String UNKNOWN = "unknown";
 
-    private final List<String> classNames = new ArrayList();
-    private final Map<String, LocalProviderDetails> localProviderDetailsMap = new HashMap<>();
+    private final List<String> classNames = new ArrayList<>();
+    private final Map<String, LocalProviderDetails> localProviderDetailsMap = new ConcurrentHashMap<>();
     private String servletPort;
     private String localIP;
     private String servletContext;

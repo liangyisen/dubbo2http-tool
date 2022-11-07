@@ -1,6 +1,7 @@
 package com.yisen.framework.rpc.controller.model;
 
-import org.apache.dubbo.common.utils.StringUtils;
+
+import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;

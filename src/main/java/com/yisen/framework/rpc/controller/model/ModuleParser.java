@@ -28,7 +28,7 @@ public class ModuleParser {
 
     @SuppressWarnings({"unchecked"})
     public List<Object> handleJSONArray(List<Object> objectArray, Class actualType) {
-        List<Object> list = new ArrayList();
+        List<Object> list = new ArrayList<>();
         for (Object object : objectArray) {
             HashMap map = new HashMap<String, Object>();
             if (object instanceof List) {
@@ -72,7 +72,7 @@ public class ModuleParser {
             Type actualType = method.getGenericParameterTypes()[paramIndex];
             if (List.class.isAssignableFrom(paramClass)) {
                 Class actualClass = this.getActualClass(actualType);
-                List list = new ArrayList();
+                List list = new ArrayList<>();
                 list.add(initObj(this.constructTheClass(actualClass)));
                 obj2bSet = list;
             } else if (Set.class.isAssignableFrom(paramClass)) {
@@ -130,7 +130,7 @@ public class ModuleParser {
                 Type actualType = writter.getGenericParameterTypes()[0];
                 if (List.class.isAssignableFrom(claz)) {
                     Class actualClass = this.getActualClass(actualType);
-                    List list = new ArrayList();
+                    List list = new ArrayList<>();
                     list.add(initObj(this.constructTheClass(actualClass)));
                     obj2bSet = list;
                 } else if (Set.class.isAssignableFrom(claz)) {

@@ -18,7 +18,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -27,9 +26,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-@RequestMapping("/rpc")
 @Slf4j
 @RestController
+@RequestMapping("/rpc")
 public class DubboRestfulController {
     private LocalProvider localProvider;
 
@@ -56,7 +55,7 @@ public class DubboRestfulController {
     }
 
     @PostMapping(value = "/call/{className}/{methodName}")
-    public Object getConsumerMethodList(@PathVariable String className, @PathVariable String methodName, @RequestBody List<Object> inputParams) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, IOException {
+    public Object getConsumerMethodList(@PathVariable String className, @PathVariable String methodName, @RequestBody List<Object> inputParams) throws Exception {
         initMethodMapper();
 
         Class referClass = BaseZookeeperRegistry.PROVIDER_MAP.get(className);
@@ -145,7 +144,7 @@ public class DubboRestfulController {
             localProvider = new LocalProvider();
             Set<Entry<String, Class>> entrySet = BaseZookeeperRegistry.PROVIDER_MAP.entrySet();
             for (Entry<String, Class> entry : entrySet) {
-                localProvider.addClass(entry.getValue(), servletPort == 0 ? LocalProvider.UNKNOWN : "" + servletPort, servletContext);
+                localProvider.addClass(entry.getValue(), servletPort == 0 ? LocalProvider.UNKNOWN : String.valueOf(servletPort), servletContext);
             }
         }
     }
