@@ -8,15 +8,13 @@ import com.yisen.framework.rpc.controller.model.LocalProviderDetails;
 import com.yisen.framework.rpc.controller.model.ModuleParser;
 import com.yisen.framework.rpc.registry.BaseZookeeperRegistry;
 import freemarker.template.Configuration;
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.io.StringWriter;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
@@ -35,17 +33,18 @@ public class DubboRestfulController {
     private int servletPort;
     private String servletContext;
 
+    @Resource
+    private Configuration mConfiguration;
+
+
     @GetMapping(value = "/provider.html", produces = "text/html;charset=UTF-8")
     public String getProviderMethodList() throws Exception {
         initMethodMapper();
-        Configuration mConfiguration = new Configuration();
-        mConfiguration.setDefaultEncoding("UTF-8");
-        mConfiguration.setClassForTemplateLoading(DubboRestfulController.class, "/framework_template");
+
         Map<String, LocalProvider> root = new HashMap<>();
-        Template template = mConfiguration.getTemplate("allInterface.ftl");
         root.put("localProvider", localProvider);
         StringWriter sw = new StringWriter(5000);
-        template.process(root, sw);
+        mConfiguration.getTemplate("allInterface.ftl").process(root, sw);
         return sw.toString();
     }
 
@@ -92,9 +91,8 @@ public class DubboRestfulController {
     }
 
     @GetMapping(value = "/get/{className}/{methodName}", produces = "text/html;charset=UTF-8")
-    public String getMethodInfo(@PathVariable String className, @PathVariable String methodName) throws IllegalArgumentException, IOException {
+    public String getMethodInfo(@PathVariable String className, @PathVariable String methodName) throws Exception {
 
-        Class referClass = BaseZookeeperRegistry.PROVIDER_MAP.get(className);
         LocalProviderDetails localProviderDetails = localProvider.getLocalProviderDetailsMap().get(className);
         Method method = localProviderDetails.getRestfullToMethod().get(methodName);
         Class<?>[] parameterTypes = method.getParameterTypes();
@@ -117,18 +115,11 @@ public class DubboRestfulController {
         }
         requestShouldBe.append("]");
         String[] details = new String[]{requestShouldBe.toString(), returnShouldBe};
-        Configuration mConfiguration = new Configuration();
-        mConfiguration.setDefaultEncoding("UTF-8");
-        mConfiguration.setClassForTemplateLoading(DubboRestfulController.class, "/framework_template");
+
         Map<String, String[]> root = new HashMap<>();
-        Template t = mConfiguration.getTemplate("methodDetails.ftl");
         root.put("details", details);
         StringWriter sw = new StringWriter(5000);
-        try {
-            t.process(root, sw);
-        } catch (TemplateException e) {
-            log.error("", e);
-        }
+        mConfiguration.getTemplate("methodDetails.ftl").process(root, sw);
         return sw.toString();
     }
 

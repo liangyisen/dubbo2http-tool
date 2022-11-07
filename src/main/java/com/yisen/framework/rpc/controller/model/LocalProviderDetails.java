@@ -10,11 +10,11 @@ import java.util.Map;
 
 public class LocalProviderDetails {
 
-    private Map<String, Method> restfullToMethod = new HashMap<>();
-    private Map<String, String[]> restfullToMethodDesc = new HashMap<>();
+    private final Map<String, Method> restfullToMethod = new HashMap<>();
+    private final Map<String, String[]> restfullToMethodDesc = new HashMap<>();
 
-    private LocalProvider localProvider;
-    private String className;
+    private final LocalProvider localProvider;
+    private final String className;
 
     public LocalProviderDetails(Class cls, LocalProvider localProvider) {
         this.localProvider = localProvider;

@@ -187,7 +187,7 @@ public class ModuleParser {
         } else if (claz == Byte.class) {
             obj2bSet = 0;
         } else if (claz == BigDecimal.class) {
-            obj2bSet = new BigDecimal(66666.666);
+            obj2bSet = BigDecimal.valueOf(66666.666);
         } else if (claz.isEnum()) {
             Method method;
             try {

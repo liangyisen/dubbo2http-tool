@@ -13,10 +13,10 @@ public class LoadDubboRestController implements Condition {
     public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
         if (System.getProperty("export_restful") != null) {
             try {
-                //当配置export_restful 是启动
+                //当配置export_restful=true 是启动
                 return Boolean.parseBoolean(System.getProperty("export_restful"));
             } catch (Exception e) {
-                log.error("", e);
+                log.error("配置export_restful 获取失败", e);
             }
         }
         return false;
