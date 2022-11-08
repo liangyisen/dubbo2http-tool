@@ -114,8 +114,7 @@ public class DubboRestfulController {
             }
         }
         requestShouldBe.append("]");
-        String[] details = new String[]{requestShouldBe.toString(), returnShouldBe};
-
+        String[] details = new String[]{requestShouldBe.toString(), returnShouldBe, "/rpc/call/" + className + "/" + methodName};
         Map<String, String[]> root = new HashMap<>();
         root.put("details", details);
         StringWriter sw = new StringWriter(5000);
