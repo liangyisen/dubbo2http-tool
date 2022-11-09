@@ -96,7 +96,7 @@
 <body>
 <h4>你好, 以下是接口对应文档!</h4>
 <h4>使用指南</h4>
-<div style="border: solid red;font-size: 14px;">
+<div style="border: solid cadetblue;font-size: 14px;">
     <p>1，暴露的都是POST方法,请求的Header请加上Content-Type application/json;charset=UTF-8</p>
     <p>2，请使用上文的"链接"作为url请求</p>
     <p>3，请求体是JSON数组也就是[]这个东西，而不是{}</p>

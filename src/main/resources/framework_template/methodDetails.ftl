@@ -92,7 +92,7 @@
             border-radius: 0 0 6px 0;
         }
     </style>
-    <link rel="stylesheet" type="text/css" href="https://apps.bdimg.com/libs/bootstrap/3.3.4/css/bootstrap.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
     <link href="/jquery.json-viewer.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
     <script src="/jquery.json-viewer.js"></script>
@@ -125,28 +125,31 @@
     </script>
 </head>
 <body>
-<h4>你好</h4>
-<h4>请求的细节是!</h4>
+<h3>请求的细节示例</h3>
 <div id="div1" style="border: solid gray;font-size: 14px;">
-    <p>1，请求的参数应该是</p>
+    <p class="bg-success">1，请求的参数应该是</p>
     ${details[0]}
-    <p>2，返回值是</p>
+    <p class="bg-info">2，返回值是</p>
     ${details[1]}
 </div>
-<h4>
-    调用接口
-</h4>
-<div id="div2" style="border: solid red;font-size: 14px;">
-    <p>1，请修改参数</p>
+<br>
+<br>
+<br>
+<br>
+<h3>调用接口</h3>
+<div id="div2" style="font-size: 14px;">
+    <p class="bg-success">1，请修改参数</p>
     <form id="submitForm" action="${details[2]?html}" method="post">
-        <label>
-            <textarea id="methodDetails">${details[0]?html}</textarea>
-        </label>
-        <input id="sendButton" type="button" value="发送请求">
+        <div class="form-group">
+            <textarea id="methodDetails" cols="30" rows="5" class="form-control">${details[0]?html}</textarea>
+        </div>
+        <input id="sendButton" class="form-control" type="button" value="发送请求">
     </form>
-    <p>2, 请求地址</p>
+
+
+    <p class="bg-primary">2, 请求地址</p>
     <div>${details[2]?html}</div>
-    <p>3，返回结果如下</p>
+    <p class="bg-info">3，返回结果如下</p>
     <div style="margin-top: 1em;">
         <div>
             <pre id="result">${details[1]}</pre>
