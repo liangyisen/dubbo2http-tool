@@ -7,6 +7,8 @@ import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.*;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 
 @SuppressWarnings("rawtypes")
@@ -188,6 +190,10 @@ public class ModuleParser {
             obj2bSet = 0;
         } else if (claz == BigDecimal.class) {
             obj2bSet = BigDecimal.valueOf(66666.666);
+        } else if (claz == LocalDateTime.class) {
+            obj2bSet = LocalDateTime.now();
+        } else if (claz == LocalTime.class) {
+            obj2bSet = LocalTime.now();
         } else if (claz.isEnum()) {
             Method method;
             try {

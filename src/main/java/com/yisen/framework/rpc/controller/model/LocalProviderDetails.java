@@ -16,6 +16,7 @@ public class LocalProviderDetails {
     private final LocalProvider localProvider;
     private final String className;
 
+
     public LocalProviderDetails(Class cls, LocalProvider localProvider) {
         this.localProvider = localProvider;
         this.className = cls.getName();
@@ -32,19 +33,19 @@ public class LocalProviderDetails {
     }
 
     private void makeDescription(String methodName, Method method) {
-        String url = "";
+        String callUrl = "";
         if (StringUtils.isEmpty(localProvider.getServletContext())) {
-            url = "http://" + this.localProvider.getLocalIP() + ":" + this.localProvider.getServletPort() + "/rpc/call/"
+            callUrl = "http://" + this.localProvider.getLocalIP() + ":" + this.localProvider.getServletPort() + "/rpc/call/"
                     + this.className + "/" + methodName;
         } else {
-            url = "http://" + this.localProvider.getLocalIP() + ":" + this.localProvider.getServletPort() + "/"
+            callUrl = "http://" + this.localProvider.getLocalIP() + ":" + this.localProvider.getServletPort()
                     + localProvider.getServletContext() + "/rpc/call/" + this.className + "/" + methodName;
         }
 
         String[] methodDesc = new String[4];
         methodDesc[0] = method.getName();
         methodDesc[1] = getParameters(method);
-        methodDesc[2] = url;
+        methodDesc[2] = callUrl;
         StringBuilder methodDetail = new StringBuilder(methodDesc[0] + "(");
         Type[] paramTypes = method.getGenericParameterTypes();
         if (paramTypes.length > 0) {
@@ -84,4 +85,5 @@ public class LocalProviderDetails {
     public Map<String, String[]> getRestfullToMethodDesc() {
         return restfullToMethodDesc;
     }
+
 }

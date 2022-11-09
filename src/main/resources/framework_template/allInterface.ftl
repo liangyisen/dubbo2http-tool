@@ -92,6 +92,7 @@
             border-radius: 0 0 6px 0;
         }
     </style>
+    <link rel="icon" type="image/x-icon" href="../ico/favicon.ico"/>
 </head>
 <body>
 <h4>你好, 以下是接口对应文档!</h4>

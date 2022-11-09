@@ -17,6 +17,27 @@ public class LocalProvider {
     private String localIP;
     private String servletContext;
 
+    private volatile static LocalProvider instance = null;
+
+    private LocalProvider() {
+        try {
+            localIP = InetAddress.getLocalHost().getHostAddress();
+        } catch (UnknownHostException e) {
+            localIP = UNKNOWN;
+        }
+    }
+
+    public static LocalProvider getInstance() {
+        if (instance == null) {
+            synchronized (LocalProvider.class) {
+                if (instance == null) {
+                    instance = new LocalProvider();
+                }
+            }
+        }
+        return instance;
+    }
+
     public void addClass(Class cls, String servletPort, String servletContext) {
         classNames.add(cls.getName());
         this.servletPort = servletPort;

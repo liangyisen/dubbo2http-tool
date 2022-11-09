@@ -10,39 +10,27 @@ import com.yisen.framework.rpc.registry.BaseZookeeperRegistry;
 import freemarker.template.Configuration;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.io.StringWriter;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 
 @Slf4j
 @RestController
 @RequestMapping("/rpc")
 public class DubboRestfulController {
-    private LocalProvider localProvider;
-
-    private int servletPort;
-    private String servletContext;
 
     @Resource
     private Configuration mConfiguration;
 
-
     @GetMapping(value = "/provider.html", produces = "text/html;charset=UTF-8")
     public String getProviderMethodList() throws Exception {
-        initMethodMapper();
-
         Map<String, LocalProvider> root = new HashMap<>();
-        root.put("localProvider", localProvider);
+        root.put("localProvider", LocalProvider.getInstance());
         StringWriter sw = new StringWriter(5000);
         mConfiguration.getTemplate("allInterface.ftl").process(root, sw);
         return sw.toString();
@@ -55,14 +43,13 @@ public class DubboRestfulController {
 
     @PostMapping(value = "/call/{className}/{methodName}")
     public Object getConsumerMethodList(@PathVariable String className, @PathVariable String methodName, @RequestBody List<Object> inputParams) throws Exception {
-        initMethodMapper();
 
         Class referClass = BaseZookeeperRegistry.PROVIDER_MAP.get(className);
         Object caller = BaseZookeeperRegistry.getCaller(referClass);
         if (referClass == null || caller == null) {
             throw new NullPointerException("no such method please check the class name");
         }
-        LocalProviderDetails localProviderDetails = localProvider.getLocalProviderDetailsMap().get(className);
+        LocalProviderDetails localProviderDetails = LocalProvider.getInstance().getLocalProviderDetailsMap().get(className);
         Method method = localProviderDetails.getRestfullToMethod().get(methodName);
         Class<?>[] parameterTypes = method.getParameterTypes();
         if (parameterTypes.length == 0) {
@@ -93,7 +80,7 @@ public class DubboRestfulController {
     @GetMapping(value = "/get/{className}/{methodName}", produces = "text/html;charset=UTF-8")
     public String getMethodInfo(@PathVariable String className, @PathVariable String methodName) throws Exception {
 
-        LocalProviderDetails localProviderDetails = localProvider.getLocalProviderDetailsMap().get(className);
+        LocalProviderDetails localProviderDetails = LocalProvider.getInstance().getLocalProviderDetailsMap().get(className);
         Method method = localProviderDetails.getRestfullToMethod().get(methodName);
         Class<?>[] parameterTypes = method.getParameterTypes();
         Class<?> returnType = method.getReturnType();
@@ -114,7 +101,7 @@ public class DubboRestfulController {
             }
         }
         requestShouldBe.append("]");
-        String[] details = new String[]{requestShouldBe.toString(), returnShouldBe, "/rpc/call/" + className + "/" + methodName};
+        String[] details = new String[]{requestShouldBe.toString(), returnShouldBe, localProviderDetails.getRestfullToMethodDesc().get(methodName)[2]};
         Map<String, String[]> root = new HashMap<>();
         root.put("details", details);
         StringWriter sw = new StringWriter(5000);
@@ -122,20 +109,4 @@ public class DubboRestfulController {
         return sw.toString();
     }
 
-    private void initMethodMapper() {
-        if (localProvider == null) {
-            try {
-                HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-                servletPort = request.getLocalPort();
-                servletContext = request.getContextPath();
-            } catch (Exception e) {
-                servletContext = LocalProvider.UNKNOWN;
-            }
-            localProvider = new LocalProvider();
-            Set<Entry<String, Class>> entrySet = BaseZookeeperRegistry.PROVIDER_MAP.entrySet();
-            for (Entry<String, Class> entry : entrySet) {
-                localProvider.addClass(entry.getValue(), servletPort == 0 ? LocalProvider.UNKNOWN : String.valueOf(servletPort), servletContext);
-            }
-        }
-    }
 }

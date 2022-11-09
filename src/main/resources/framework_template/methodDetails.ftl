@@ -92,10 +92,12 @@
             border-radius: 0 0 6px 0;
         }
     </style>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
-    <link href="/jquery.json-viewer.css" rel="stylesheet" type="text/css" />
+    <link rel="icon" type="image/x-icon" href="../../../ico/favicon.ico"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+          integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <link href="../../../jquery.json-viewer.css" rel="stylesheet" type="text/css"/>
     <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
-    <script src="/jquery.json-viewer.js"></script>
+    <script src="../../../jquery.json-viewer.js"></script>
     <script>
         $(document).ready(
             function () {
@@ -114,7 +116,7 @@
                                 withQuotes: true
                             };
                             $('#result').hide();
-                              var input = eval('(' + JSON.stringify(data.responseJSON) + ')');
+                            var input = eval('(' + JSON.stringify(data.responseJSON) + ')');
                             $('#resultJson').jsonViewer(input, options);
                         }
                     })
