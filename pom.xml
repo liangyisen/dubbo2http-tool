@@ -5,11 +5,15 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.yisen</groupId>
-    <artifactId>rpc-dubbo-2-http</artifactId>
+    <artifactId>dubbo2http-tool</artifactId>
     <packaging>jar</packaging>
-    <name>yisen-rpc-dubbo-2-http</name>
+    <name>Dubbo2Http-tool</name>
     <version>1.0.0</version>
-    <description>dubbo协议转http协议</description>
+    <description>dubbo协议转http协议工具</description>
+
+    <properties>
+        <java.version>1.8</java.version>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -66,8 +70,23 @@
         </dependency>
 
     </dependencies>
+    <distributionManagement>
+        <repository>
+            <id>nexus-releases</id>
+            <name>releases</name>
+            <!--修改自己的maven远程仓库-->
+            <url>http://localhost:8081/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>nexus-snapshots</id>
+            <name>snapshots</name>
+            <!--修改自己的maven远程仓库地址-->
+            <url>http://localhost:8081/repository/maven-snapshots/</url>
+        </snapshotRepository>
 
+    </distributionManagement>
     <build>
+
         <!-- Maven插件引入 start -->
         <plugins>
             <plugin>
